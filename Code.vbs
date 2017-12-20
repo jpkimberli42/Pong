@@ -1,5 +1,5 @@
 Sub MoveBall()
-
+'THIS CODE IS OUR BEST ATTEMPT AT THE ORIGINAL GAME 'PONG'
 Dim HorDir As Integer
 Dim VertDir As Integer
 
