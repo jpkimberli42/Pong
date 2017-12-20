@@ -2,6 +2,25 @@ Sub MoveBall()
 
 Dim HorDir As Integer
 Dim VertDir As Integer
+Dim rep_count As Integer
+
+Dim paddleA_Top As Integer
+Dim paddleA_Bot As Integer
+Dim paddleA_Edge As Integer
+
+Dim paddleB_Top As Integer
+Dim paddleB_Bot As Integer
+Dim paddleB_Edge As Integer
+
+Dim ball_Top As Integer
+Dim ball_Bot As Integer
+Dim ball_Right As Integer
+Dim ball_Left As Integer
+
+Dim table_Top As Integer
+Dim table_Bot As Integer
+Dim table_Right As Integer
+Dim table_Left As Integer
 
 HorDir = 1
 VertDir = -1
@@ -12,25 +31,53 @@ Do
 rep_count = rep_count + 1
 DoEvents
 
-    ActiveSheet.Shapes.Range(Array("Oval 1")).IncrementLeft HorDir
-    ActiveSheet.Shapes.Range(Array("Oval 1")).IncrementTop VertDir
+    With ActiveSheet.Shapes.Range(Array("Oval 1"))
+        .IncrementLeft HorDir
+        .IncrementTop VertDir
+        ball_Left = .Left
+        ball_Right = .Left + .Width
+        ball_Top = .Top
+        ball_Bot = .Top + .Height
+    End With
+    With ActiveSheet.Shapes.Range(Array("Rectangle 2"))
+        table_Left = .Left
+        table_Right = .Left + .Width
+        table_Top = .Top
+        table_Bot = .Top + .Height
+    End With
+    With ActiveSheet.Shapes.Range(Array("Rectangle 3"))
+        paddleA_Edge = .Left + .Width
+        paddleA_Top = .Top
+        paddleA_Bot = .Top + .Height
+    End With
+    With ActiveSheet.Shapes.Range(Array("Rectangle 5"))
+        paddleB_Edge = .Left
+        paddleB_Top = .Top
+        paddleB_Bot = .Top + .Height
+    End With
+    
     
     'ActiveSheet.Shapes.Range(Array("Rectangle 5")).IncrementTop VertDir
     
-    If ActiveSheet.Shapes.Range(Array("Oval 1")).Left + ActiveSheet.Shapes.Range(Array("Oval 1")).Width >= ActiveSheet.Shapes.Range(Array("Rectangle 5")).Left Then
+    If ball_Right >= paddleB_Edge And ball_Bot >= paddleB_Top And ball_Top <= paddleB_Bot Then
         HorDir = -1
     End If
     
-    If ActiveSheet.Shapes.Range(Array("Oval 1")).Left <= ActiveSheet.Shapes.Range(Array("Rectangle 3")).Left + ActiveSheet.Shapes.Range(Array("Rectangle 3")).Width Then
+    If ball_Left <= paddleA_Edge And ball_Bot >= paddleA_Top And ball_Top <= paddleA_Bot Then
         HorDir = 1
     End If
     
-    If ActiveSheet.Shapes.Range(Array("Oval 1")).Top <= ActiveSheet.Shapes.Range(Array("Rectangle 2")).Top Then
+    If ball_Top <= table_Top Then
         VertDir = 1
     End If
     
-    If ActiveSheet.Shapes.Range(Array("Oval 1")).Top + ActiveSheet.Shapes.Range(Array("Oval 1")).Height >= ActiveSheet.Shapes.Range(Array("Rectangle 2")).Height + ActiveSheet.Shapes.Range(Array("Rectangle 2")).Top Then
+    If ball_Bot >= table_Bot Then
         VertDir = -1
+    End If
+    
+    If ball_Right >= table_Right Or ball_Left <= table_Left Then
+        MsgBox "You Lose"
+        Exit Sub
     End If
     
     TimeOut (0.01)
